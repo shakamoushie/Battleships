@@ -64,6 +64,9 @@ if "myscore" not in st.session_state:
 if "plyrbtns" not in st.session_state:
     st.session_state.plyrbtns = {}
 
+if "lottiefiles" not in st.session_state:
+    st.session_state.lottiefiles = ['','']
+
 # common functions
 def ReduceGapFromPageTop():
     st.markdown(" <style> div[class^='block-container'] { padding-top: 3rem; } </style> ", unsafe_allow_html=True)  # reduce gap from page top
@@ -80,15 +83,25 @@ def SidebarHeader():
         st.markdown(ship_icon, unsafe_allow_html=True)
         st.markdown(horizontal_bar, True)
 
-def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
-    try:
-        with open(vFile, "r") as fl:
-            LottieCode = json.load(fl)
+@st.cache_data
+def load_blast():
+    with open(vpth + 'blast.json', "r") as fl:
+        return json.load(fl)
 
-        st_lottie(LottieCode, height=vHeight, width=vWidth, speed=vSpeed, loop=vLoop)   # vCategory == 'General'
+@st.cache_data
+def load_noblast():
+    with open(vpth + 'noblast.json', "r") as fl:
+        return json.load(fl)
 
-    except:
-        st.error(f"Lottie load error for {vFile}")
+# def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
+#     try:
+#         with open(vFile, "r") as fl:
+#             LottieCode = json.load(fl)
+
+#         st_lottie(LottieCode, height=vHeight, width=vWidth, speed=vSpeed, loop=vLoop)   # vCategory == 'General'
+
+#     except:
+#         st.error(f"Lottie load error for {vFile}")
 
 def ReadPictureFile(wch_fl):
     try:
@@ -117,7 +130,7 @@ def ViewHelp():
     <li style="font-size:15px";>Each type of hidden war vessel occupies a different length on this grid: {all_ships}.</li>
     <li style="font-size:15px";>Each war vessel is placed either horizontally or vertically, on this grid; never diagonally and/or intersecting with any other vessel.</li>
     <li style="font-size:15px";>You need to deduce where each of these war vessels are hidden and bomb them by pressing the appropriate button that overlaps their position.</li>
-    <li style="font-size:15px";>The moment you bomb even 1 square of any war vessel, its colour will change from black to <span style='color:red'>red</span> in the sidebar, to denote that that vessel has been hit.</li>
+    <li style="font-size:15px";>The moment you bomb even 1 square of any war vessel, its colour will change from black to <span style='color:red'>red</span> in the sidebar, to denote that that vessel has been hit (💥).</li>
     <li style="font-size:15px";>The moment you bomb all squares of any war vessel, it will be covered with a black 'X' across its <span style='color:red'>red</span> picture in the sidebar, to denote that that hit / damaged vessel has been finally sunk.</li>
     <li style="font-size:15px";>Each hit on a war vessel will earn you <strong>+3</strong> points; each miss will earn you <strong>-1</strong> point.</li>
     <li style="font-size:15px";>At the end of the game, if you have a positive score, you will have <strong>won</strong>; otherwise, you will have <strong>lost</strong>.</li>
@@ -215,14 +228,17 @@ def BlastCheck(vcell, cellobj):
         st.session_state.myscore += 3
         CheckShipStatus()
         with cellobj:
-            PlayLottie('blast.json', 40, 40, 1, False)
+            # PlayLottie('blast.json', 40, 40, 1, False)
+            st_lottie(st.session_state.lottiefiles[0], height=40, width=40, speed=1, loop=False)
             tm.sleep(1)
 
     elif st.session_state.plyrbtns[vcell]['hasShip'] == False and st.session_state.plyrbtns[vcell]['isBlanked'] == False:
         st.session_state.plyrbtns[vcell]['isBlanked'] = True
         st.session_state.myscore -= 1
         with cellobj:
-            PlayLottie('noblast.json', 26, 26, 1, False)
+            # PlayLottie('noblast.json', 26, 26, 1, False)
+            # st_lottie(st.session_state.lottiefiles[1], height=45, width=45, speed=1, loop=False)
+            st_lottie(st.session_state.lottiefiles[1], height=45, width=45, speed=1, loop=True)
             tm.sleep(1)
 
 def PreNewGame():
@@ -236,6 +252,9 @@ def PreNewGame():
     for i in range(len(ships)):
         ship_name = list(ships.keys())[i]
         ships[ship_name]['ship_status'] = 'ok' 
+
+    st.session_state.lottiefiles[0] = load_blast()
+    st.session_state.lottiefiles[1] = load_noblast()
 
     CreateAndPlaceShips()
 
@@ -338,7 +357,8 @@ def NewGame():
             globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '💥'), True)
 
         elif st.session_state.plyrbtns[vcell]['isBlanked'] == True:
-            globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '⬛'), True)
+            # globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '⬛'), True)
+            globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '🟦'), True)
 
         else:
             globals()['cols' + arr_ref][vcell-mval].button('&nbsp;&nbsp;&nbsp;', on_click=BlastCheck, args=(vcell, globals()['cols' + arr_ref][vcell-mval]), key=f"B{vcell}")
