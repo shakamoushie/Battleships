@@ -216,14 +216,14 @@ def BlastCheck(vcell, cellobj):
         CheckShipStatus()
         with cellobj:
             PlayLottie('blast.json', 40, 40, 1, False)
-            tm.sleep(0.75)
+            tm.sleep(1)
 
     elif st.session_state.plyrbtns[vcell]['hasShip'] == False and st.session_state.plyrbtns[vcell]['isBlanked'] == False:
         st.session_state.plyrbtns[vcell]['isBlanked'] = True
         st.session_state.myscore -= 1
         with cellobj:
             PlayLottie('noblast.json', 26, 26, 1, False)
-            tm.sleep(0.75)
+            tm.sleep(1)
 
 def PreNewGame():
     st.session_state.occupied_cells = []
