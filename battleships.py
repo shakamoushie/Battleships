@@ -64,12 +64,6 @@ if "myscore" not in st.session_state:
 if "plyrbtns" not in st.session_state:
     st.session_state.plyrbtns = {}
 
-if "blast_animation" not in st.session_state:
-    st.session_state.blast_animation = None
-
-if "no_blast_animation" not in st.session_state:
-    st.session_state.no_blast_animation = None
-
 # common functions
 def ReduceGapFromPageTop():
     st.markdown(" <style> div[class^='block-container'] { padding-top: 3rem; } </style> ", unsafe_allow_html=True)  # reduce gap from page top
@@ -86,35 +80,15 @@ def SidebarHeader():
         st.markdown(ship_icon, unsafe_allow_html=True)
         st.markdown(horizontal_bar, True)
 
-@st.cache_data
-def load_blast():
+def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
     try:
-        with open('blast.json', "r") as fl:
+        with open(vFile, "r") as fl:
             LottieCode = json.load(fl)
-        return LottieCode
-    
-    except:
-        st.error(f"Lottie load error for blast animation file")
 
-@st.cache_data
-def load_no_blast():
-    try:
-        with open('noblast.json', "r") as fl:
-            LottieCode = json.load(fl)
-        return LottieCode
+        st_lottie(LottieCode, height=vHeight, width=vWidth, speed=vSpeed, loop=vLoop)   # vCategory == 'General'
 
     except:
-        st.error(f"Lottie load error for noblast animation file")
-           
-# def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
-#     try:
-#         with open(vFile, "r") as fl:
-#             LottieCode = json.load(fl)
-
-#         st_lottie(LottieCode, height=vHeight, width=vWidth, speed=vSpeed, loop=vLoop)   # vCategory == 'General'
-
-#     except:
-#         st.error(f"Lottie load error for {vFile}")
+        st.error(f"Lottie load error for {vFile}")
 
 def ReadPictureFile(wch_fl):
     try:
@@ -241,14 +215,14 @@ def BlastCheck(vcell, cellobj):
         st.session_state.myscore += 3
         CheckShipStatus()
         with cellobj:
-            st_lottie(st.session_state.blast_animation, 40, 40, 1, False)
+            PlayLottie('blast.json', 40, 40, 1, False)
             tm.sleep(1)
 
     elif st.session_state.plyrbtns[vcell]['hasShip'] == False and st.session_state.plyrbtns[vcell]['isBlanked'] == False:
         st.session_state.plyrbtns[vcell]['isBlanked'] = True
         st.session_state.myscore -= 1
         with cellobj:
-            st_lottie(st.session_state.no_blast_animation, 26, 26, 1, False)
+            PlayLottie('noblast.json', 26, 26, 1, False)
             tm.sleep(1)
 
 def PreNewGame():
@@ -262,9 +236,6 @@ def PreNewGame():
     for i in range(len(ships)):
         ship_name = list(ships.keys())[i]
         ships[ship_name]['ship_status'] = 'ok' 
-
-    st.session_state.blast_animation = load_blast()
-    st.session_state.no_blast_animation = load_no_blast()
 
     CreateAndPlaceShips()
 
