@@ -1,7 +1,5 @@
 import streamlit as st
-# from streamlit_lottie import st_lottie              # pip install streamlit-lottie
 import os
-import json
 import time as tm
 from datetime import datetime as dt
 import random
@@ -83,18 +81,6 @@ def SidebarHeader():
         st.markdown(ship_icon, unsafe_allow_html=True)
         st.markdown(horizontal_bar, True)
 
-# @st.cache_data
-# def load_blast():
-#     with open(vpth + 'blast.json', "r") as fl:
-#         return json.load(fl)
-
-# @st.cache_data
-# def load_noblast():
-#     with open(vpth + 'noblast.json', "r") as fl:
-#         return json.load(fl)
-
-
-
 @st.cache_data
 def load_blast():
     myblast = ReadPictureFile('blast.gif')
@@ -104,16 +90,6 @@ def load_blast():
 def load_noblast():
     myblast = ReadPictureFile('noblast.gif')
     return f"<img src='data:png;base64,{myblast}'>&nbsp;&nbsp;"
-
-# def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
-#     try:
-#         with open(vFile, "r") as fl:
-#             LottieCode = json.load(fl)
-
-#         st_lottie(LottieCode, height=vHeight, width=vWidth, speed=vSpeed, loop=vLoop)   # vCategory == 'General'
-
-#     except:
-#         st.error(f"Lottie load error for {vFile}")
 
 def ReadPictureFile(wch_fl):
     try:
@@ -241,8 +217,6 @@ def BlastCheck(vcell, cellobj):
         st.session_state.myscore += 3
         CheckShipStatus()
         with cellobj:
-            # PlayLottie('blast.json', 40, 40, 1, False)
-            # st_lottie(st.session_state.lottiefiles[0], height=40, width=40, speed=1, loop=False)
             st.markdown(st.session_state.lottiefiles[0], unsafe_allow_html=True)
             tm.sleep(1)
 
@@ -250,8 +224,6 @@ def BlastCheck(vcell, cellobj):
         st.session_state.plyrbtns[vcell]['isBlanked'] = True
         st.session_state.myscore -= 1
         with cellobj:
-            # PlayLottie('noblast.json', 26, 26, 1, False)
-            # st_lottie(st.session_state.lottiefiles[1], height=45, width=45, speed=1, loop=False)
             st.markdown(st.session_state.lottiefiles[1], unsafe_allow_html=True)
             tm.sleep(1)
 
@@ -306,7 +278,6 @@ def NewGame():
             st.markdown(html_txt + f"<img src='data:png;base64,{myship}'>&nbsp;&nbsp;" + f"({shiplength} sq)", unsafe_allow_html=True)
 
         st.info(f"{ScoreEmoji()} Score: {st.session_state.myscore}")
-
         # st.warning(f"occupied_cells: {st.session_state.occupied_cells}")  # show what computer has generated
 
         st.markdown(horizontal_bar, True)
@@ -371,7 +342,6 @@ def NewGame():
             globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '💥'), True)
 
         elif st.session_state.plyrbtns[vcell]['isBlanked'] == True:
-            # globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '⬛'), True)
             globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '☹'), True)
 
         else:
@@ -399,7 +369,7 @@ def Main():
         sc1, sc2 = st.columns(2)
         
         gr_spc = '&nbsp;' * 5
-        if sc1.button(f"📚 Rules {gr_spc}"):
+        if sc1.button(f"💡 Rules {gr_spc}"):
             st.session_state.runpage = ViewHelp        
             st.experimental_rerun()
 
