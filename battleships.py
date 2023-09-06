@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_lottie import st_lottie              # pip install streamlit-lottie
+# from streamlit_lottie import st_lottie              # pip install streamlit-lottie
 import os
 import json
 import time as tm
