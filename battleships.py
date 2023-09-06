@@ -83,15 +83,27 @@ def SidebarHeader():
         st.markdown(ship_icon, unsafe_allow_html=True)
         st.markdown(horizontal_bar, True)
 
+# @st.cache_data
+# def load_blast():
+#     with open(vpth + 'blast.json', "r") as fl:
+#         return json.load(fl)
+
+# @st.cache_data
+# def load_noblast():
+#     with open(vpth + 'noblast.json', "r") as fl:
+#         return json.load(fl)
+
+
+
 @st.cache_data
 def load_blast():
-    with open(vpth + 'blast.json', "r") as fl:
-        return json.load(fl)
+    myblast = ReadPictureFile('blast.gif')
+    return f"<img src='data:png;base64,{myblast}'>&nbsp;&nbsp;"
 
 @st.cache_data
 def load_noblast():
-    with open(vpth + 'noblast.json', "r") as fl:
-        return json.load(fl)
+    myblast = ReadPictureFile('noblast.gif')
+    return f"<img src='data:png;base64,{myblast}'>&nbsp;&nbsp;"
 
 # def PlayLottie(vFile, vHeight=500, vWidth=700, vSpeed=1, vLoop=True):
 #     try:
@@ -132,6 +144,7 @@ def ViewHelp():
     <li style="font-size:15px";>You need to deduce where each of these war vessels are hidden and bomb them by pressing the appropriate button that overlaps their position.</li>
     <li style="font-size:15px";>The moment you bomb even 1 square of any war vessel, its colour will change from black to <span style='color:red'>red</span> in the sidebar, to denote that that vessel has been hit (💥).</li>
     <li style="font-size:15px";>The moment you bomb all squares of any war vessel, it will be covered with a black 'X' across its <span style='color:red'>red</span> picture in the sidebar, to denote that that hit / damaged vessel has been finally sunk.</li>
+    <li style="font-size:15px";>If your bomb misses any vessel, it will be denoted by ☹.</li>
     <li style="font-size:15px";>Each hit on a war vessel will earn you <strong>+3</strong> points; each miss will earn you <strong>-1</strong> point.</li>
     <li style="font-size:15px";>At the end of the game, if you have a positive score, you will have <strong>won</strong>; otherwise, you will have <strong>lost</strong>.</li>
     </ol></span>""" 
@@ -229,7 +242,8 @@ def BlastCheck(vcell, cellobj):
         CheckShipStatus()
         with cellobj:
             # PlayLottie('blast.json', 40, 40, 1, False)
-            st_lottie(st.session_state.lottiefiles[0], height=40, width=40, speed=1, loop=False)
+            # st_lottie(st.session_state.lottiefiles[0], height=40, width=40, speed=1, loop=False)
+            st.markdown(st.session_state.lottiefiles[0], unsafe_allow_html=True)
             tm.sleep(1)
 
     elif st.session_state.plyrbtns[vcell]['hasShip'] == False and st.session_state.plyrbtns[vcell]['isBlanked'] == False:
@@ -238,7 +252,7 @@ def BlastCheck(vcell, cellobj):
         with cellobj:
             # PlayLottie('noblast.json', 26, 26, 1, False)
             # st_lottie(st.session_state.lottiefiles[1], height=45, width=45, speed=1, loop=False)
-            st_lottie(st.session_state.lottiefiles[1], height=45, width=45, speed=1, loop=True)
+            st.markdown(st.session_state.lottiefiles[1], unsafe_allow_html=True)
             tm.sleep(1)
 
 def PreNewGame():
@@ -358,7 +372,7 @@ def NewGame():
 
         elif st.session_state.plyrbtns[vcell]['isBlanked'] == True:
             # globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '⬛'), True)
-            globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '🟦'), True)
+            globals()['cols' + arr_ref][vcell-mval].markdown(blast_emoji.replace('|fill_variable|', '☹'), True)
 
         else:
             globals()['cols' + arr_ref][vcell-mval].button('&nbsp;&nbsp;&nbsp;', on_click=BlastCheck, args=(vcell, globals()['cols' + arr_ref][vcell-mval]), key=f"B{vcell}")
