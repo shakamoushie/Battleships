@@ -224,7 +224,7 @@ if "GameDetails" not in mystate:
 # common functions
 def ReduceGapFromPageTop():
     st.markdown(" <style> div[class^='block-container'] { padding-top: 2rem; } </style> ", unsafe_allow_html=True)  # reduce gap from page top
-    st.markdown(" <style> div[class^='css-1544g2n'] { padding-top: 2rem; } </style> ", unsafe_allow_html=True)
+    st.markdown(" <style> div[class^='st-emotion-cache-10oheav'] { padding-top: 2rem; } </style> ", unsafe_allow_html=True)
 
 def SidebarHeader():
     with st.sidebar:
