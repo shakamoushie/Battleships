@@ -8,7 +8,6 @@ from PIL import Image
 import shutil
 import json
 from streamlit_autorefresh import st_autorefresh
-from st_screen_stats import ScreenData     # pip install streamlit-screen-stats
 
 st.set_page_config(page_title = "Battleships", page_icon="⛴", layout = "wide", initial_sidebar_state = "expanded")
 
