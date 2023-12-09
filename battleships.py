@@ -569,7 +569,11 @@ def DetermineLoginDevice():
     except: pass
 
 if 'runpage' not in mystate:
-    if DetermineLoginDevice() != "mobile":
+    vdevice = DetermineLoginDevice()
+    st.info(f"vdevice: {vdevice})
+    st.stop()
+    
+    if vdevice != "mobile":
         ClearExpiredGameFolders()
         LoadLottieFiles()
         mystate.runpage = Main
