@@ -570,7 +570,7 @@ def DetermineLoginDevice():
 
 if 'runpage' not in mystate:
     vdevice = DetermineLoginDevice()
-    st.info(f"vdevice: {vdevice})
+    st.info(f"vdevice: {vdevice}")
     st.stop()
     
     if vdevice != "mobile":
