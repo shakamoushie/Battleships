@@ -1,3 +1,6 @@
-streamlit==1.27.0
+streamlit==1.29.0
 Pillow==9.5.0
-streamlit-autorefresh
+streamlit-autorefresh==1.0.1
+streamlit-local-storage==0.0.12
+streamlit-browser-session-storage==0.0.3
+streamlit-screen-stats==0.0.28
