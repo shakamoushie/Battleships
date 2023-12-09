@@ -559,21 +559,9 @@ def Main():
     MainImg = Image.open(MainImg).resize((1000, 650))
     st.image(MainImg, use_column_width='auto')
 
-def DetermineLoginDevice():
-    try:
-        screenD = ScreenData(setTimeout=1000)
-        screen_stats = screenD.st_screen_data_window_top()
-
-        return "mobile" if screen_stats['screen']['width'] <= 400 or screen_stats['screen']['height'] <= 400 else "laptop"
-    
-    except: pass
-
 if 'runpage' not in mystate:
-    if DetermineLoginDevice() == "laptop":
-        ClearExpiredGameFolders()
-        LoadLottieFiles()
-        mystate.runpage = Main
+    ClearExpiredGameFolders()
+    LoadLottieFiles()
+    mystate.runpage = Main
     
-    else: st.error("✋ This game needs to be played on a bigger screen.")
-
 mystate.runpage()
